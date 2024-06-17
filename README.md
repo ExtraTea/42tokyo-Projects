@@ -2,6 +2,7 @@
 
 ## Overview 概要
 This repository contains various programming projects completed as part of the 42 Tokyo curriculum. Each project is designed to develop specific technical skills and problem-solving abilities.
+
 このリポジトリは42Tokyo([リンク](https://42tokyo.jp/))のカリキュラムとして完成された様々なコーディングプロジェクトが含まれます。それぞれのプロジェクトは特定のスキルと問題解決能力を高めるよう設計されています。
 
 ## Features 内容
