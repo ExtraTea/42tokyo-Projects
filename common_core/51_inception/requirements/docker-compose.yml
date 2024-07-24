@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  mariadb:
+    build:
+      context: ./srrequirementscs/mariadb
+      dockerfile: Dockerfile
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      ADMIN_USER: ${ADMIN_USER}
+      ADMIN_PASS: ${ADMIN_PASS}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - mynetwork
+
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+      args:
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        AUTH_KEY: ${AUTH_KEY}
+    image: wordpress
+    ports:
+      - 9000:9000
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      - mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      ADMIN_USER: ${ADMIN_USER}
+      ADMIN_PASS: ${ADMIN_PASS}
+      DOCK_USER: ${DOCK_USER}
+      DOCK_PASSWORD: ${DOCK_PASSWORD}
+      AUTH_KEY : ${AUTH_KEY}
+    networks:
+      - mynetwork
+    command: bash -c "/usr/local/bin/wp-setup.sh && php-fpm7.4 -F"
+
+  nginx:
+    build:
+      context: ./requirements/nginx
+      dockerfile: Dockerfile
+    image: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      - wordpress
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+
+volumes:
+  wordpress_data:
+    name: wordpress_data
+    driver: local
+    driver_opts:
+      device: /home/dai/data/wordpress_data
+      o: bind
+      type: none
+  db_data:
+    name: db_data
+    driver: local
+    driver_opts:
+      device: /home/dai/data/db_data
+      o: bind
+      type: none
