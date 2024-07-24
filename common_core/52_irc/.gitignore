@@ -1,0 +1,6 @@
+*.o
+debug
+ircclient
+ircserv
+a.out
+memo

@@ -1,0 +1,18 @@
+nc 127.0.0.1 5000
+USER takamatu
+NICK daisuke
+PASS 0000
+
+USER okada host server real
+NICK oresama
+
+USER okada host server real
+NICK one
+PASS 0000
+
+
+USER okada host server real
+NICK one
+
+USER okada host server real
+NICK okapi
